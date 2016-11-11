@@ -78,12 +78,15 @@ function countSearchTerms() {
 	for(var key in categories) {
 		var count = 0;
 		for (var i = 0; i < categories[key].length; i++) {
-			count += dictionary[categories[key][i]];
+			if(!dictionary[categories[key][i]]) continue;
+			else count += dictionary[categories[key][i]];
 
 		}
+		console.log(count)
 		var obj = {"category": key, "count": count}
 		categoriesCount.push(obj)
 	}
+	console.log(categoriesCount)
 	createBarChart(categoriesCount);
 }
 
@@ -102,5 +105,5 @@ function createBarChart(categoriesCount) {
 	    .data(categoriesCount) //need to collect data!
 	  .enter().append("div")
 	    .style("width", function(d) { return d.count * 10 + "px"; })
-	    .text(function(d) { return d.category; });
+	    .text(function(d) { return `${d.category}: ${d.count}`; });
 }
