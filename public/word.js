@@ -2,58 +2,41 @@ var categories = {};
 
 function addCategory() {
 	var category = document.getElementById("category").value.toLowerCase();
-	if(!categories[category]) {
+	if(category !== "" && !categories[category]) {
 		categories[category] = [];
-		document.getElementById("categories").innerHTML += '<input type="radio" name="categories" onclick="selectCategory()" value=' + category + '>' + category + '<br>';
-		addCategoryRow(category);
+		d3.select("#categories")
+			.append("div")
+			.style("margin-left", "20px")
+			.attr("id", category)
+			.html('<br><strong>' + category + '</strong><input type="submit" value="-" onclick="removeCategory(this)"><br><input type="text" id="search-term-' + category + '"><input type="submit" value="+" onclick="addSearchTerm(' + '\''+ category + '\'' + ')">');
 		}
 	document.getElementById("category").value = null;
 }
 
-//when user selects category we need to keep track so we can add words to correct category
-function selectCategory() {
-	var currentCategory,
-		radio = document.getElementsByName('categories');
-	for (var i = 0; i < radio.length; i++) {
-		if(radio[i].checked) {
-			currentCategory = radio[i].value;
-			break;
-		}
-	}
-	if(currentCategory) document.getElementById("search-terms").innerHTML = categories[currentCategory].join(', ');
-	return currentCategory;
+function removeCategory(element) {
+	var category = element.parentNode;
+	delete categories[category.textContent];
+	d3.select(category).remove();
 }
 
-function addSearchTerm() {
-	var currentCategory = selectCategory();
-	var word = document.getElementById("word").value.toLowerCase().trim();
-	if(currentCategory && categories[currentCategory].indexOf(word) < 0) {
-		categories[currentCategory].push(word);
-		document.getElementById("search-terms").innerHTML = categories[currentCategory].join(', ');
-		updateTable(categories[currentCategory].join(', '));
+function addSearchTerm(category) {
+	var searchTerm = document.getElementById("search-term-" + category).value.toLowerCase().trim();
+	if(searchTerm !== "" && categories[category].indexOf(searchTerm) < 0) {
+		categories[category].push(searchTerm);
+		d3.select("#" + category)
+			.append("div")
+			.style("margin-left", "20px")
+			.html('<em>' + searchTerm + '</em><input type="submit" value="-" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">');
 	}
-	document.getElementById("word").value = null;
+
+	document.getElementById("search-term-" + category).value = null;
 }
 
-//for table view
-function addCategoryRow(category) {
-    var table = document.getElementById("myTable");
-    var row = table.insertRow(-1);
-        row.setAttribute("id", category);
-    var cell1 = row.insertCell(0);
-    	cell1.innerHTML = category;
-}
-
-function updateTable(words) {
-	var currentCategory = selectCategory();
-	var cell2,
-		row = document.getElementById(currentCategory);
-	if (row.cells.length < 2) {
-		cell2 = row.insertCell(1);
-	} else {
-		cell2 = row.cells[1]
-	}
-	cell2.innerHTML = words;
+function removeSearchTerm(element, category) {
+	var searchTerm = element.parentNode;
+	var index = categories[category].indexOf(searchTerm.textContent);
+	categories[category].splice(index, 1);
+	d3.select(searchTerm).remove();
 }
 
 //where the bulk of the logic happens when user clicks 'Search' 
@@ -86,9 +69,7 @@ function countSearchTerms() {
 		}
 	}
 	console.log(transcript)
-	console.log(collapsedSearchTerms)
 	console.log(dictionary)
-	dictionary = {};
 }
 
 //need to collapse searchTerms (& remove duplicates)
@@ -99,3 +80,4 @@ function collapseSearchTerms(searchTerms) {
 	return searchTerms;
 }
 
+ 
