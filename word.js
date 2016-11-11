@@ -1,19 +1,4 @@
-var categories = {},
-	currentCategory,
-	searchTerms = [],
-	transcript, 
-	dictionary = {}; //searchTerm: counter
-
-
-// (function(){
-// 	var nonGlobal = "hi";
-
-// 	function eins(str){
-// 		console.log(str);
-// 	}
-
-// 	eins(nonGlobal);
-// })();
+var categories = {};
 
 function addCategory() {
 	var category = document.getElementById("category").value.toLowerCase();
@@ -27,7 +12,8 @@ function addCategory() {
 
 //when user selects category we need to keep track so we can add words to correct category
 function selectCategory() {
-	var radio = document.getElementsByName('categories');
+	var currentCategory,
+		radio = document.getElementsByName('categories');
 	for (var i = 0; i < radio.length; i++) {
 		if(radio[i].checked) {
 			currentCategory = radio[i].value;
@@ -35,10 +21,12 @@ function selectCategory() {
 		}
 	}
 	document.getElementById("search-terms").innerHTML = categories[currentCategory].join(', ');
+	return currentCategory;
 }
 
 function addWord() {
-	var word = document.getElementById("word").value.toLowerCase();
+	var currentCategory = selectCategory();
+	var word = document.getElementById("word").value.toLowerCase().trim();
 	if(currentCategory && categories[currentCategory].indexOf(word) < 0) {
 		categories[currentCategory].push(word);
 		document.getElementById("search-terms").innerHTML = categories[currentCategory].join(', ');
@@ -52,14 +40,15 @@ function addWord() {
 function addCategoryRow(category) {
     var table = document.getElementById("myTable");
     var row = table.insertRow(-1);
-        row.setAttribute("id", category)
+        row.setAttribute("id", category);
     var cell1 = row.insertCell(0);
     	cell1.innerHTML = category;
 }
 
 function updateTable(words) {
-	var cell2;
-	var row = document.getElementById(currentCategory);
+	var currentCategory = selectCategory();
+	var cell2,
+		row = document.getElementById(currentCategory);
 	if (row.cells.length < 2) {
 		cell2 = row.insertCell(1);
 	} else {
@@ -70,30 +59,44 @@ function updateTable(words) {
 
 //where the bulk of the logic happens when user clicks 'Search' 
 function countWords() {
-	transcript = document.getElementById("inputString").value.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\r?\n|\r/g," ").toLowerCase().split(' '), //remove punctuations and lowercase
-	collapseSearchTerms() //helper function
+	var searchTerms = [],
+		dictionary = {}, //searchTerm: counter
+		transcript = document.getElementById("inputString").value.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\r?\n|\r/g," ").toLowerCase().split(' '); //emove punctuations, line breaks/returns, lowercase
+	
+	var collapsedSearchTerms = collapseSearchTerms(searchTerms); //helper function
 
-	var max = Math.max.apply(null, searchTerms),
-		min = Math.min.apply(null, searchTerms);
+	//Goal: decrease words to search thru by filtering out words not in range
+
+	//collapse search terms to find max and min length of words
+	var sortedSearchTerms = collapsedSearchTerms.join(' ').split(' ').filter((i, idx, arr) => arr.indexOf(i) === idx);
+		sortedsearchTerms = sortedSearchTerms.sort((a, b) => a.length - b.length);
+	var lastIndex = sortedsearchTerms.length - 1;
+	var max = sortedsearchTerms[lastIndex].length,
+		min = sortedsearchTerms[0].length;
+
+
+	//remove transcript words not within range of min and max 
+	transcript = transcript.filter(i => i.length >= min && i.length <= max);
 
 	for (var i = 0; i < transcript.length; i++) { //loop thru transcript
-		for (var j = 0; j < searchTerms.length; j++) { //loop thru searchTerms
-			if(transcript.slice(i, i + searchTerms[j].split(' ').length).join(' ') === searchTerms[j]) {
-				if(dictionary[searchTerms[j]]) dictionary[searchTerms[j]]++;
-				else dictionary[searchTerms[j]] = 1;
+		for (var j = 0; j < collapsedSearchTerms.length; j++) { //loop thru searchTerms
+			if(transcript.slice(i, i + collapsedSearchTerms[j].split(' ').length).join(' ') === collapsedSearchTerms[j]) {
+				if(dictionary[collapsedSearchTerms[j]]) dictionary[collapsedSearchTerms[j]]++;
+				else dictionary[collapsedSearchTerms[j]] = 1;
 			}
 		}
 	}
 	console.log(transcript)
-	console.log(searchTerms)
+	console.log(collapsedSearchTerms)
 	console.log(dictionary)
 	dictionary = {};
 }
 
 //need to collapse searchTerms (& remove duplicates)
-function collapseSearchTerms() {
+function collapseSearchTerms(searchTerms) {
 	for(var key in categories) {
 		searchTerms = _.union(searchTerms, categories[key]) //use lodash method to combine arrays and return array with unique values 
 	}
+	return searchTerms;
 }
 
