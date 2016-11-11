@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <title>Stackathon - Fullstack Academy</title>
-  <link rel="stylesheet" href="word.css">
+  <link rel="stylesheet" href="/word.css">
 </head>
 
 <body>
@@ -13,16 +13,19 @@
   
   <br><br>
 
-  <textarea id="inputString" rows="10" cols="50"></textarea>
+  <textarea id="inputString" rows="10" cols="100"></textarea>
 
   <h3>Category</h3>
   <input type="text" id="category">
-  <input type="submit" value="Add" onclick="addCategory()">
+  <input type="submit" value="+" onclick="addCategory()">
+  <input type="submit" value="-" onclick="removeCategory()">
+
  
   <h4>Search Terms</h4>
   <div id="categories"></div>
   <input type="text" id='word'>
-  <input type="submit" value="+" onclick="addWord()">
+  <input type="submit" value="+" onclick="addSearchTerm()">
+  <input type="submit" value="-" onclick="removeSearchTerm()">
   <div id="search-terms"></div>
 
   <br>
@@ -36,7 +39,7 @@
 
   <br>
 
-  <input type="submit" value="Search" onclick="countWords()">
+  <input type="submit" value="Search" onclick="countSearchTerms()">
 
   <footer class="footer">
     <div class="container">
@@ -44,9 +47,9 @@
     </div>
   </footer>
   
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://cdn.jsdelivr.net/lodash/4.16.6/lodash.min.js"></script>
-
-  <script src="word.js"></script>
+  <script src="/word.js"></script>
   
 </body>
 </html>
