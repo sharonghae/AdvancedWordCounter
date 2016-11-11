@@ -7,28 +7,32 @@ function addCategory() {
 		d3.select("#categories")
 			.append("div")
 			.style("margin-left", "20px")
-			.attr("id", category)
-			.html('<br><strong>' + category + '</strong><input type="submit" value="-" onclick="removeCategory(this)"><br><input type="text" id="search-term-' + category + '"><input type="submit" value="+" onclick="addSearchTerm(' + '\''+ category + '\'' + ')">');
+			.attr("id", "category-" + category)
+			.html('<br><strong>' + category + '</strong><a href="#" class="button small alert" onclick="removeCategory(this)">-</a>\
+				<div class="row"><div class="large-12 columns"><div class="row collapse"><div class="small-10 columns">\
+				<input type="text" id="search-term-' + category + '">\
+				</div><div class="small-2 columns">\
+				<a href="#" class="button" onclick="addSearchTerm(' + '\''+ category + '\'' + ')">+</a>\
+				</div></div></div></div>');
 		}
 	document.getElementById("category").value = null;
 }
 
 function removeCategory(element) {
-	var category = element.parentNode;
-	delete categories[category.textContent];
-	d3.select(category).remove();
+	var category = element.previousSibling.textContent;
+	delete categories[category];
+	d3.select(element.parentNode).remove();
 }
 
 function addSearchTerm(category) {
 	var searchTerm = document.getElementById("search-term-" + category).value.toLowerCase().trim();
 	if(searchTerm !== "" && categories[category].indexOf(searchTerm) < 0) {
 		categories[category].push(searchTerm);
-		d3.select("#" + category)
+		d3.select("#category-" + category)
 			.append("div")
 			.style("margin-left", "20px")
-			.html('<em>' + searchTerm + '</em><input type="submit" value="-" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">');
+			.html('<em>' + searchTerm + '</em><a href="#" class="button small alert" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">-</a>');
 	}
-
 	document.getElementById("search-term-" + category).value = null;
 }
 
@@ -45,6 +49,8 @@ function countSearchTerms() {
 		dictionary = {}, //searchTerm: counter
 		transcript = document.getElementById("inputString").value.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\r?\n|\r/g," ").toLowerCase().split(' '); //remove punctuations, line breaks/returns, lowercase
 	
+	if(transcript == "") return;
+
 	var collapsedSearchTerms = collapseSearchTerms(searchTerms); //helper function
 
 	//Goal: decrease words to search thru by filtering out words not in range
@@ -55,7 +61,6 @@ function countSearchTerms() {
 	var lastIndex = sortedsearchTerms.length - 1;
 	var max = sortedsearchTerms[lastIndex].length,
 		min = sortedsearchTerms[0].length;
-
 
 	//remove transcript words not within range of min and max 
 	transcript = transcript.filter(i => i.length >= min && i.length <= max);
@@ -68,8 +73,18 @@ function countSearchTerms() {
 			}
 		}
 	}
-	console.log(transcript)
-	console.log(dictionary)
+
+	var categoriesCount = [];
+	for(var key in categories) {
+		var count = 0;
+		for (var i = 0; i < categories[key].length; i++) {
+			count += dictionary[categories[key][i]];
+
+		}
+		var obj = {"category": key, "count": count}
+		categoriesCount.push(obj)
+	}
+	createBarChart(categoriesCount);
 }
 
 //need to collapse searchTerms (& remove duplicates)
@@ -80,4 +95,12 @@ function collapseSearchTerms(searchTerms) {
 	return searchTerms;
 }
 
- 
+
+function createBarChart(categoriesCount) {
+	d3.select(".chart")
+	  .selectAll("div")
+	    .data(categoriesCount) //need to collect data!
+	  .enter().append("div")
+	    .style("width", function(d) { return d.count * 10 + "px"; })
+	    .text(function(d) { return d.category; });
+}

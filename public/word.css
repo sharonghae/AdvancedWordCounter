@@ -1,9 +1,19 @@
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-h4, #categories input {
+#categories input {
 	margin-left: 20px;
 }
 
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+footer {
+	margin-top: 25px;
+	padding-top: 25px;
+	background-color: black;
+	color: white;
+}
