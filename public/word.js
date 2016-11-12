@@ -34,7 +34,7 @@ function addSearchTerm(category, categoryID) {
 		d3.select("#category-" + categoryID)
 			.append("div")
 			.style("margin-left", "20px")
-			.html('<em>' + searchTerm + '</em><a href="#" class="button small alert" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">-</a>');
+			.html('<em>' + searchTerm + '</em><a class="button small alert" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">-</a>');
 	}
 	document.getElementById("search-term-" + categoryID).value = null;
 }
@@ -85,11 +85,9 @@ function countSearchTerms() {
 			else count += dictionary[categories[key][i]];
 
 		}
-		console.log(count)
 		var obj = {"category": key, "count": count}
 		categoriesCount.push(obj)
 	}
-	console.log(categoriesCount)
 	createBarChart(categoriesCount);
 }
 
@@ -103,6 +101,10 @@ function collapseSearchTerms(searchTerms) {
 
 
 function createBarChart(categoriesCount) {
+	d3.select(".chart")
+	  .selectAll("div")
+	  .remove();
+	  
 	d3.select(".chart")
 	  .selectAll("div")
 	    .data(categoriesCount) //need to collect data!

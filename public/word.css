@@ -17,6 +17,8 @@ footer {
 	bottom: 0;
 	width:100%;
 	padding-top: 25px;
+	height: 75px;
+	clear:both;
 	background-color: black;
 	color: white;
 }
