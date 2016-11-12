@@ -13,8 +13,11 @@
 }
 
 footer {
-	margin-top: 25px;
+	position: relative;
+	margin-top: -75px; /* negative value of footer height */
 	padding-top: 25px;
+	height: 75px;
+	clear:both;
 	background-color: black;
 	color: white;
 }
