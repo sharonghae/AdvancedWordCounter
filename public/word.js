@@ -1,18 +1,21 @@
 var categories = {};
 
 function addCategory() {
-	var category = document.getElementById("category").value.toLowerCase();
+	var category = document.getElementById("category").value.trim();
+
+	var categoryID = category.replace(/\s+/g, '-');
+	console.log(categoryID)
 	if(category !== "" && !categories[category]) {
 		categories[category] = [];
 		d3.select("#categories")
 			.append("div")
 			.style("margin-left", "20px")
-			.attr("id", "category-" + category)
+			.attr("id", "category-" + categoryID)
 			.html('<br><strong>' + category + '</strong><a href="#" class="button small alert" onclick="removeCategory(this)">-</a>\
 				<div class="row"><div class="large-12 columns"><div class="row collapse"><div class="small-10 columns">\
-				<input type="text" id="search-term-' + category + '">\
+				<input type="text" id="search-term-' + categoryID + '">\
 				</div><div class="small-2 columns">\
-				<a href="#" class="button" onclick="addSearchTerm(' + '\''+ category + '\'' + ')">+</a>\
+				<a href="#" class="button" onclick="addSearchTerm(' + '\''+ category + '\',\'' + categoryID + '\'' + ')">+</a>\
 				</div></div></div></div>');
 		}
 	document.getElementById("category").value = null;
@@ -24,16 +27,16 @@ function removeCategory(element) {
 	d3.select(element.parentNode).remove();
 }
 
-function addSearchTerm(category) {
-	var searchTerm = document.getElementById("search-term-" + category).value.toLowerCase().trim();
+function addSearchTerm(category, categoryID) {
+	var searchTerm = document.getElementById("search-term-" + categoryID).value.toLowerCase().trim();
 	if(searchTerm !== "" && categories[category].indexOf(searchTerm) < 0) {
 		categories[category].push(searchTerm);
-		d3.select("#category-" + category)
+		d3.select("#category-" + categoryID)
 			.append("div")
 			.style("margin-left", "20px")
 			.html('<em>' + searchTerm + '</em><a href="#" class="button small alert" onclick="removeSearchTerm(this,' + '\''+ category + '\'' + ')">-</a>');
 	}
-	document.getElementById("search-term-" + category).value = null;
+	document.getElementById("search-term-" + categoryID).value = null;
 }
 
 function removeSearchTerm(element, category) {
