@@ -1,3 +1,21 @@
+* {margin:0;padding:0;} 
+
+html, body {height: 100%;}
+
+#wrap {min-height: 100%;}
+
+#main {overflow:auto;
+	padding-bottom: 75px;}  /* must be same height as the footer */
+
+#footer {position: relative;
+	padding-top: 25px;
+	margin-top: -75px; /* negative value of footer height */
+	height: 75px;
+	clear:both;
+	background-color: black;
+	color: white;
+} 
+
 #categories input {
 	margin-left: 20px;
 }
@@ -12,13 +30,3 @@
 	height: 50px;
 }
 
-footer {
-	position: absolute;
-	bottom: 0;
-	width:100%;
-	padding-top: 25px;
-	height: 75px;
-	clear:both;
-	background-color: black;
-	color: white;
-}

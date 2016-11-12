@@ -11,13 +11,15 @@
 </head>
 
 <body>
+  <div id="wrap">
+  <div id="main">
   <div class="row">
 
     <h2>Advanced Word Counter</h2>
 
     <textarea id="inputString" rows="10" cols="100"></textarea>
 
-    <div class="row">
+    <div class="row" id="inner-wrap">
       <div class="large-6 columns">
         <h3>Categories</h3>
         <div class="row">
@@ -45,12 +47,14 @@
     </div>
 
   </div>
+  </div>
+  </div>
 
-  <footer class="footer">
+  <div id="footer">
     <div class="row">
       <p class="text-muted">Built by Sharon Choe at <a href="http://www.gracehopper.com/">Grace Hopper Academy</a></p>
     </div>
-  </footer>
+  </div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>

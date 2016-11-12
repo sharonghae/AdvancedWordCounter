@@ -11,11 +11,11 @@ function addCategory() {
 			.append("div")
 			.style("margin-left", "20px")
 			.attr("id", "category-" + categoryID)
-			.html('<br><strong>' + category + '</strong><a href="#" class="button small alert" onclick="removeCategory(this)">-</a>\
+			.html('<br><strong>' + category + '</strong><a class="button small alert" onclick="removeCategory(this)">-</a>\
 				<div class="row"><div class="large-12 columns"><div class="row collapse"><div class="small-10 columns">\
 				<input type="text" id="search-term-' + categoryID + '">\
 				</div><div class="small-2 columns">\
-				<a href="#" class="button" onclick="addSearchTerm(' + '\''+ category + '\',\'' + categoryID + '\'' + ')">+</a>\
+				<a class="button" onclick="addSearchTerm(' + '\''+ category + '\',\'' + categoryID + '\'' + ')">+</a>\
 				</div></div></div></div>');
 		}
 	document.getElementById("category").value = null;
