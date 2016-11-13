@@ -20,13 +20,62 @@ html, body {height: 100%;}
 	margin-left: 20px;
 }
 
-.chart div {
-	font: 20px sans-serif;
-	background-color: steelblue;
-	text-align: right;
-	padding: 3px;
-	margin: 1px;
-	color: white;
-	height: 50px;
+/*.chart div {*/
+	/*font: 20px sans-serif;*/
+	/*background-color: steelblue;*/
+	/*text-align: right;*/
+	/*padding: 3px;*/
+	/*margin: 1px;*/
+	/*color: white;*/
+	/*height: 50px;*/
+/*}*/
+
+/**
+	SECTION: D3 BAR CHART OPTIONS
+**/
+
+svg {
+	width: 100%;
+	height: 100%;
+	position: center;
 }
 
+.toolTip {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	position: absolute;
+	display: none;
+	width: auto;
+	height: auto;
+	background: none repeat scroll 0 0 white;
+	border: 0 none;
+	border-radius: 8px 8px 8px 8px;
+	box-shadow: -3px 3px 15px #888888;
+	color: black;
+	font: 12px sans-serif;
+	padding: 5px;
+	text-align: center;
+}
+
+text {
+	font: 10px sans-serif;
+	color: white;
+}
+
+text.value {
+	font-size: 120%;
+	fill: white;
+}
+
+.axisHorizontal path{
+	fill: none;
+}
+
+.axisHorizontal .tick line {
+	stroke-width: 1;
+	stroke: rgba(0, 0, 0, 0.2);
+}
+
+.bar {
+	fill: steelblue;
+	fill-opacity: .9;
+}

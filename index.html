@@ -16,8 +16,13 @@
   <div class="row">
 
     <h2>Advanced Word Counter</h2>
-
-    <textarea id="inputString" rows="10" cols="100"></textarea>
+    <div id="demo-click">
+      <a onclick="demoFill()">Click here for DEMO</a>
+    </div>
+    <div id="reset-page">
+      <a onclick="reset()">Reset</a>
+    </div>
+    <textarea id="mainInputText" rows="10" cols="100" placeholder="Please enter text"></textarea>
 
     <div class="row" id="inner-wrap">
       <div class="large-6 columns">
@@ -26,7 +31,7 @@
           <div class="large-12 columns">
             <div class="row collapse">
               <div class="small-10 columns">
-                <input type="text" id="category">
+                <input type="text" id="category" placeholder="Enter category">
               </div>
               <div class="small-2 columns">
                 <a class="button postfix" onclick="addCategory()">+</a>
